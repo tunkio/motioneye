@@ -7,7 +7,7 @@ params:
     mlist_name: netcam_params
     mname: decoder
   netcam_keepalive:
-    mtype: str
+    mtype: bool
     mlist_name: netcam_params
     mname: keepalive
   netcam_proxy:

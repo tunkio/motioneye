@@ -1,4 +1,6 @@
 params:
+  camera:
+    type: str
   area_detect:
     type: str
   auto_brightness:
@@ -236,14 +238,8 @@ params:
   netcam_decoder:
     type: str
   netcam_keepalive:
-    type: str
+    type: bool
     default: off
-    options:
-      type: list
-      values:
-        - on
-        - off
-        - force
   netcam_proxy:
     type: str
   netcam_tolerant_check:
@@ -790,7 +786,7 @@ params:
   webcontrol_lock_minutes:
     type: int
     default: 5
-  webcontrol_params:
+  webcontrol_parms:
     type: int
     default: 0
     options:

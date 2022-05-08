@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import json
 import collections
 import datetime
 import errno
@@ -31,6 +32,7 @@ from tornado.ioloop import IOLoop
 from motioneye import meyectl, motionctl, settings, tasks, uploadservices, utils
 from motioneye.controls import diskctl, smbctl, v4l2ctl
 from motioneye.controls.powerctl import PowerControl
+from motioneye.utils.motion_config_mapper import MotionConfigMapper
 
 _CAMERA_CONFIG_FILE_NAME = 'camera-%(id)s.conf'
 _MAIN_CONFIG_FILE_NAME = 'motion.conf'
@@ -267,8 +269,11 @@ def get_main(as_lines=False):
         ],
     )
 
+
+    mc = MotionConfigMapper(motionctl.find_motion()[1])
+    main_config = mc.convert_from_ver(main_config)
     # adapt directives from pre-4.2 configuration
-    adapt_config_directives(main_config, _MOTION_PRE_TO_POST_42_OPTIONS_MAPPING)
+    #adapt_config_directives(main_config, _MOTION_PRE_TO_POST_42_OPTIONS_MAPPING)
 
     _get_additional_config(main_config)
     _set_default_motion(main_config)
@@ -289,9 +294,11 @@ def set_main(main_config):
     main_config = dict(main_config)
     _set_additional_config(main_config)
 
-    # adapt directives to pre-4.2 configuration, if needed
-    if motionctl.is_motion_pre42():
-        adapt_config_directives(main_config, _MOTION_POST_TO_PRE_42_OPTIONS_MAPPING)
+    mc = MotionConfigMapper(motionctl.find_motion()[1])
+    main_config = mc.convert_to_ver(main_config)
+#    # adapt directives to pre-4.2 configuration, if needed
+#    if motionctl.is_motion_pre42():
+#        adapt_config_directives(main_config, _MOTION_POST_TO_PRE_42_OPTIONS_MAPPING)
 
     config_file_path = os.path.join(settings.CONF_PATH, _MAIN_CONFIG_FILE_NAME)
 
@@ -477,9 +484,10 @@ def get_camera(camera_id, as_lines=False):
         )
         camera_config['@id'] = camera_id
 
+        mc = MotionConfigMapper(motionctl.find_motion()[1])
+        camera_config = mc.convert_from_ver(camera_config)
         # adapt directives from pre-4.2 configuration
-        adapt_config_directives(camera_config, _MOTION_PRE_TO_POST_42_OPTIONS_MAPPING)
-
+        #adapt_config_directives(camera_config, _MOTION_PRE_TO_POST_42_OPTIONS_MAPPING)
         _get_additional_config(camera_config, camera_id=camera_id)
 
         _set_default_motion_camera(camera_id, camera_config)
@@ -511,11 +519,14 @@ def set_camera(camera_id, camera_config):
     camera_config = dict(camera_config)
 
     if utils.is_local_motion_camera(camera_config):
+        mc = MotionConfigMapper(motionctl.find_motion()[1])
+        camera_config = mc.convert_to_ver(camera_config)
+        # adapt directives from pre-4.2 configuration
         # adapt directives to pre-4.2 configuration, if needed
-        if motionctl.is_motion_pre42():
-            adapt_config_directives(
-                camera_config, _MOTION_POST_TO_PRE_42_OPTIONS_MAPPING
-            )
+        #if motionctl.is_motion_pre42():
+        #    adapt_config_directives(
+        #        camera_config, _MOTION_POST_TO_PRE_42_OPTIONS_MAPPING
+        #    )
 
         # set the enabled status in main config
         main_config = get_main()
