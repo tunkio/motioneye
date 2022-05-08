@@ -1,0 +1,75 @@
+params:
+  netcam_highres:
+    mtype: str
+    mname: netcam_high_url
+  netcam_decoder:
+    mtype: str
+    mlist_name: netcam_params
+    mname: decoder
+  netcam_keepalive:
+    mtype: str
+    mlist_name: netcam_params
+    mname: keepalive
+  netcam_proxy:
+    mtype: str
+    mlist_name: netcam_params
+    mname: proxy
+  netcam_tolerant_check:
+    mtype: bool
+    mlist_name: netcam_params
+    mname: tolerant_check
+  netcam_use_tcp:
+    mtype: bool
+    mlist_name: netcam_params
+    mname: use_tcp
+  netcam_capture_rate:
+    mtype: int
+    mlist_name: netcam_params
+    mname: capture_rate
+  netcam_rstp_transport:
+    mtype: str
+    mlist_name: netcam_params
+    mname: rstp_transport
+  netcam_input_format:
+    mtype: str 
+    mlist_name: netcam_params
+    mname: input_format
+
+  frequency:
+    mtype: int
+    mlist_name: video_params
+    mname: frequency
+  input:
+    mtype: int
+    mlist_name: video_params
+    mname: input
+  norm:
+    mtype: int 
+    mlist_name: video_params
+    mname: norm
+  v4l2_palette:
+    mtype: int 
+    mlist_name: video_params
+    mname: v4l2_palette
+  brightness:
+    mtype: int 
+    mlist_name: video_params
+    mname: brightness
+  contrast:
+    mtype: int
+    mlist_name: video_params
+    mname: contrast
+  hue:
+    mtype: int
+    mlist_name: video_params
+    mname: hue
+  power_line_frequency:
+    mtype: int 
+    mlist_name: video_params
+    mname: power_line_frequency
+  saturation:
+    mtype: int 
+    mlist_name: video_params
+    mname: saturation
+
+

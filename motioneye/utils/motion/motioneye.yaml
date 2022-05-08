@@ -1,0 +1,813 @@
+params:
+  area_detect:
+    type: str
+  auto_brightness:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 3
+  camera:
+    type: str
+  camera_dir:
+    type: str
+  camera_id:
+    type: int
+    options:
+      type: range
+      min: 1
+      max: 32000
+  camera_name:
+    type: str
+    options: null
+  daemon:
+    type: bool
+    default: off
+  database_busy_timeout:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 65535
+  database_dbname:
+    type: str
+  database_host:
+    type: str
+  database_password:
+    type: str
+  database_port:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 65535
+  database_type:
+    type: str
+    options:
+      type: list
+      values: ['mysql', 'mariadb', 'postgresql', 'sqlite3']
+  database_user:
+    type: str
+  despeckle_filter:
+    type: str
+    options:
+      type: list
+      values: 
+        - E
+        - e
+        - D
+        - d
+        - l
+  emulate_motion:
+    type: bool
+    default: off
+  event_gap:
+    type: int
+    default: 60
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  flip_axis:
+    type: str
+    options:
+      type: list
+      values:
+        - none
+        - v
+        - h
+  framerate:
+    type: int
+    default: 15
+    options:
+      type: range
+      min: 2
+      max: 100
+  height:
+    type: int
+    default: 480
+  lightswitch_frames:
+    type: int
+    default: 5
+    options:
+      type: range
+      min: 1
+      max: 1000
+  lightswitch_percent:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 100
+  locate_motion_mode:
+    type: str
+    default: off
+    options:
+      type: list
+      values:
+        - on
+        - off
+        - preview
+  locate_motion_style:
+    type: str
+    default: box
+    options:
+      type: list
+      values:
+        - box
+        - redbox
+        - cross
+        - redcross
+  log_file:
+    type: str
+  log_level:
+    type: int
+    default: 6
+    options:
+      range:
+      min: 1
+      max: 9
+  log_type:
+    type: multi
+    default: ALL
+    options:
+      type: list
+      values:
+        - COR
+        - STR
+        - ENC
+        - NET
+        - DBL
+        - EVT
+        - TRK
+        - VID
+        - ALL
+  mask_file:
+    type: str
+  mask_privacy:
+    type: str
+  minimum_frame_time:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  minimum_motion_frames:
+    type: int
+    default: 1
+    options:
+      type: range
+      min: 1
+      max: 1000
+  mmalcam_name:
+    type: str
+  mmalcam_control_params:
+    type: str
+    options:
+      type: custom
+  movie_bps:
+    type: int
+    default: 400000
+    options:
+      type: range
+      min: 0
+      max: 999999
+  movie_codec:
+    type: str
+    default: mkv
+    options:
+      type: list
+      values:
+        - mpeg4
+        - msmpeg4
+        - swf
+        - fly
+        - ffv1
+        - mov
+        - mp4
+        - mkv
+        - hevc
+  movie_duplicate_frames:
+    type: bool
+    default: off
+  movie_extpipe:
+    type: str
+  movie_extpipe_use:
+    type: bool
+    default: off
+  movie_filename:
+    type: str
+    default: '%v-%Y%m%d%H%M%S'
+  movie_max_time:
+    type: int
+    default: 120
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  movie_output:
+    type: bool
+    default: on
+  movie_output_motion:
+    type: bool
+    default: off
+  movie_passthrough:
+    type: bool
+    default: off
+  movie_quality:
+    type: int
+    default: 60
+    options:
+      type: range
+      min: 0
+      max: 100
+  native_language:
+    type: bool
+    default: on
+  netcam_high_params:
+    type: maplist
+  netcam_highres:
+    type: str
+  netcam_decoder:
+    type: str
+  netcam_keepalive:
+    type: str
+    default: off
+    options:
+      type: list
+      values:
+        - on
+        - off
+        - force
+  netcam_proxy:
+    type: str
+  netcam_tolerant_check:
+    type: bool
+    default: off
+  netcam_use_tcp:
+    type: bool
+    default: on
+  netcam_capture_rate:
+    type: int
+    default:
+    options:
+  netcam_rstp_transport:
+    type: str
+    default: tcp
+    options:
+      type: list
+      values:
+        - tcp
+        - udp
+  netcam_input_format:
+    type: str
+    default: h264
+    options:
+      type: list
+      values:
+        - h264
+        - mjpeg
+  netcam_url:
+    type: str
+  netcam_userpass:
+    type: str
+  noise_level:
+    type: int
+    default: 32
+    options:
+      type: range
+      min: 1
+      max: 255
+  noise_tune:
+    type: bool
+    default: on
+  on_area_detected:
+    type: str
+  on_camera_found:
+    type: str
+  on_camera_lost:
+    type: str
+  on_event_end:
+    type: str
+  on_event_start:
+    type: str
+  on_motion_detected:
+    type: str
+  on_movie_end:
+    type: str
+  on_movie_start:
+    type: str
+  on_picture_save:
+    type: str
+  pause:
+    type: bool
+    default: off
+  picture_exif:
+    type: str
+  picture_output:
+    type: str
+    default: off
+    options:
+      type: list
+      values:
+        - on
+        - off
+        - first
+        - best
+  picture_output_motion:
+    type: bool
+    default: off
+  picture_filename:
+    type: str
+    default: '%v-%Y%m%d%H%M%S-%q'
+  picture_type:
+    type: str
+    default: jpeg
+    options:
+      type: list
+      values: 
+        - jpeg
+        - webp
+        - ppm
+        - grey
+  picture_quality:
+    type: int
+    default: 75
+    options:
+      type: range
+      min: 1
+      max: 100
+  pid_file:
+    type: str
+  post_capture:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  pre_capture:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 100
+  quiet:
+    type: bool
+    default: on
+  rotate:
+    type: int
+    default: 0
+    options:
+      type: list
+      values:
+        - 0
+        - 90
+        - 180
+        - 270
+  roundrobin_frames:
+    type: int
+    default: 1
+    options:
+      type: range
+      min: 1
+      max: 214744836647
+  roundrobin_skip:
+    type: int
+    default: 1
+    options:
+      type: range
+      min: 1
+      max: 214744836647
+  roundrobin_switchfilter:
+    type: bool
+    default: off
+  setup_mode:
+    type: bool
+    default: off
+  smart_mask_speed:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 10
+  snapshot_filename:
+    type: str
+    default: '%v-%Y%m%d%H%M%S-snapshot'
+  snapshot_interval:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  sql_log_movie:
+    type: bool
+    default: off
+  sql_log_picture:
+    type: bool
+    default: off
+  sql_log_snapshot:
+    type: bool
+    default: off
+  sql_log_timelapse:
+    type: bool
+    default: off
+  sql_query:
+    type: str
+  sql_query_start:
+    type: str
+  sql_query_stop:
+    type: str
+  stream_auth_method:
+    type: int
+    default: 0
+    options:
+      type: list
+      values:
+        - 0
+        - 1
+        - 2
+  stream_authentication:
+    type: str
+  stream_cors_header:
+    type: str
+  stream_grey:
+    type: bool
+    default: off
+  stream_localhost:
+    type: bool
+    default: on
+  stream_maxrate:
+    type: int
+    default: 1
+    options:
+      type: range
+      min: 1
+      max: 100
+  stream_motion:
+    type: bool
+    default: off
+  stream_port:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 65535
+  stream_preview_method:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 4
+  stream_preview_newline:
+    type: bool
+    default: off
+  stream_preview_scale:
+    type: int
+    default: 25
+    options:
+      type: range
+      min: 1
+      max: 100
+  stream_quality:
+    type: int
+    default: 50
+    options:
+      type: range
+      min: 1
+      max: 100
+  stream_tls:
+    type: bool
+    default: off
+  target_dir:
+    type: str 
+  text_changes:
+    type: bool
+    default: off
+  text_event:
+    type: str
+    default: '%Y%m%d%H%M%S'
+  text_left:
+    type: str
+  text_right:
+    type: str
+  text_scale:
+    type: int
+    default: 1
+    options:
+      type: range
+      min: 1
+      max: 10
+  threshold:
+    type: int
+    default: 1500
+    options:
+      type: range
+      min: 1
+      max: 21474483647
+  threshold_maximum:
+    type: int
+    default: 0
+  threshold_tune:
+    type: bool
+    default: off
+  timelapse_codec:
+    type: str
+    default: mpg
+    options:
+      type: list
+      values:
+        - mpg
+        - mpeg4
+  timelapse_filename:
+    type: str
+    default: '%Y%m%d-timelapse'
+  timelapse_fps:
+    type: int
+    default: 30
+    options:
+      type: range
+      min: 0
+      max: 100
+  timelapse_interval:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  timelapse_mode:
+    type: str
+    default: daily
+    options:
+      type: list
+      values:
+        - hourly
+        - daily
+        - weekly-sunday
+        - weekly-monday
+        - monthly
+        - manual
+  track_auto:
+    type: bool
+    default: off
+  track_generic_move:
+    type: str
+  track_homex:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_homey:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_iomojo_id:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_maxx:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_maxy:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_minx:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_miny:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_motorx:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_motorx_reverse:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_motory:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_motory_reverse:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_move_wait:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_port:
+    type: str
+  track_speed:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_step_angle_x:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_step_angle_y:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_stepsize:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 214744836647
+  track_type:
+    type: int
+    default: 0
+    options:
+      type: list
+      values:
+        - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+  tunerdevice:
+    type: str
+    default: /dev/tuner0
+  frequency:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 999999
+  input:
+    type: int
+    default: -1
+  norm:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 3
+  v4l2_palette:
+    type: int
+    default:
+    options:
+      type: range
+      min: 0
+      max: 20
+  brightness:
+    type: int
+    default:
+    options:
+  contrast:
+    type:
+    default:
+    options:
+  hue:
+    type:
+    default:
+    options:
+  power_line_frequency:
+    type:
+    default:
+    options:
+  saturation:
+    type:
+    default:
+    options:
+  vid_control_params:
+    type: list
+  videodevice:
+    type: str
+    default: /dev/video0
+  video_pipe:
+    type: str
+  video_pipe_motion:
+    type: str
+  watchdog_tmo:
+    type: int
+    default: 30
+  watchdog_kill:
+    type: int
+    default: 30
+  webcontrol_auth_method:
+    type: int
+    default: 0
+    options:
+      type: list
+      values:
+        - 0
+        - 1
+        - 2
+  webcontrol_authentication:
+    type: str
+  webcontrol_cert:
+    type: str
+  webcontrol_cors_header:
+    type: str
+  webcontrol_interface:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 2
+  webcontrol_ipv6:
+    type: bool
+    default: off
+  webcontrol_key:
+    type: str
+  webcontrol_localhost:
+    type: bool
+    default: on
+  webcontrol_lock_attempts:
+    type: int
+    default: 5
+  webcontrol_lock_max_ips:
+    type: int
+    default: 25
+  webcontrol_lock_minutes:
+    type: int
+    default: 5
+  webcontrol_params:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 3
+  webcontrol_port:
+    type: int
+    default: 0
+    options:
+      type: range
+      min: 0
+      max: 65535
+  webcontrol_tls:
+    type: bool
+    default: off
+  width:
+    type: int
+    default: 640
+
