@@ -1,0 +1,32 @@
+params:
+  contrast:
+    mtype: int
+    mlist_name: vid_control_params
+    mname: contrast
+  hue:
+    mtype: int
+    mlist_name: vid_control_params
+    mname: hue
+  netcam_decoder:
+    mtype: none
+  pause:
+    mtype: none
+  power_line_frequency:
+    mtype: int
+    mlist_name: vid_control_params
+    mname: power_line_frequency
+  saturation:
+    mtype: int
+    mlist_name: vid_control_params
+    mname: saturation
+  watchdog_tmp:
+    mtype: none
+  watchdog_kill:
+    mtype: none
+  webcontrol_lock_attempts:
+    mtype: none
+  webcontrol_lock_max_ips:
+    mtype: none
+  webcontrol_lock_minutes:
+    mtype: none
+

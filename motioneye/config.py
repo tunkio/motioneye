@@ -61,6 +61,7 @@ _ACTIONS = [
 ]
 
 _main_config_cache = None
+_motion_config_mapper = None
 _camera_config_cache = {}
 _camera_ids_cache = None
 _additional_section_funcs = []
@@ -136,69 +137,6 @@ _USED_MOTION_OPTIONS = {
 }
 
 
-def text_double(v, data):
-    return {'text_scale': [1, 2][v]}
-
-
-def webcontrol_html_output(v, data):
-    return {'webcontrol_interface': int(v)}
-
-
-def text_scale(v, data):
-    return {'text_double': True if int(v) > 1 else False}
-
-
-def webcontrol_interface(v, data):
-    return {'webcontrol_html_output': bool(v)}
-
-
-_MOTION_PRE_TO_POST_42_OPTIONS_MAPPING = {
-    'ffmpeg_video_codec': 'movie_codec',
-    'ffmpeg_output_movies': 'movie_output',
-    'ffmpeg_output_debug_movies': 'movie_output_motion',
-    'ffmpeg_variable_bitrate': 'movie_quality',
-    'lightswitch': 'lightswitch_percent',
-    'max_movie_time': 'movie_max_time',
-    'output_pictures': 'picture_output',
-    'output_debug_pictures': 'picture_output_motion',
-    'quality': 'picture_quality',
-    'rtsp_uses_tcp': 'netcam_use_tcp',
-    'text_double': text_double,
-    'webcontrol_html_output': webcontrol_html_output,
-}
-
-_MOTION_POST_TO_PRE_42_OPTIONS_MAPPING = {
-    'movie_codec': 'ffmpeg_video_codec',
-    'movie_output': 'ffmpeg_output_movies',
-    'movie_output_motion': 'ffmpeg_output_debug_movies',
-    'movie_quality': 'ffmpeg_variable_bitrate',
-    'lightswitch_percent': 'lightswitch',
-    'movie_max_time': 'max_movie_time',
-    'picture_output': 'output_pictures',
-    'picture_output_motion': 'output_debug_pictures',
-    'picture_quality': 'quality',
-    'netcam_use_tcp': 'rtsp_uses_tcp',
-    'text_scale': text_scale,
-    'webcontrol_interface': webcontrol_interface,
-    'webcontrol_parms': None,
-}
-
-
-def adapt_config_directives(data, mapping):
-    for name in list(data.keys()):
-        mapped = mapping.get(name)
-        if mapped is None:
-            continue
-
-        value = data.pop(name)
-
-        if callable(mapped):
-            data.update(mapped(value, data))
-
-        else:  # assuming simple new name
-            data[mapped] = value
-
-
 def additional_section(func):
     _additional_section_funcs.append(func)
 
@@ -207,7 +145,18 @@ def additional_config(func):
     _additional_config_funcs.append(func)
 
 
-def get_main(as_lines=False):
+def do_motion_config_map(method, **params):
+    global _motion_config_mapper
+
+    if _motion_config_mapper:
+        logging.debug("Cached motion config mapper found")
+        return getattr(_motion_config_mapper, method)(**params)
+
+    logging.debug("No cached motion config mapper found")
+    _motion_config_mapper = MotionConfigMapper(motionctl.find_motion()[1])
+    return getattr(_motion_config_mapper, method)(**params)
+
+def get_main(as_lines=False, motion_version_override=False):
     global _main_config_cache
 
     if not as_lines and _main_config_cache is not None:
@@ -267,13 +216,10 @@ def get_main(as_lines=False):
             '@normal_username',
             '@normal_password',
         ],
+
     )
 
-
-    mc = MotionConfigMapper(motionctl.find_motion()[1])
-    main_config = mc.convert_from_ver(main_config)
-    # adapt directives from pre-4.2 configuration
-    #adapt_config_directives(main_config, _MOTION_PRE_TO_POST_42_OPTIONS_MAPPING)
+    main_config = do_motion_config_map('convert_from_version', config=main_config, version=motion_version_override)
 
     _get_additional_config(main_config)
     _set_default_motion(main_config)
@@ -283,7 +229,7 @@ def get_main(as_lines=False):
     return main_config
 
 
-def set_main(main_config):
+def set_main(main_config, convert_to_version=False):
     global _main_config_cache
 
     main_config = dict(main_config)
@@ -294,27 +240,23 @@ def set_main(main_config):
     main_config = dict(main_config)
     _set_additional_config(main_config)
 
-    mc = MotionConfigMapper(motionctl.find_motion()[1])
-    main_config = mc.convert_to_ver(main_config)
-#    # adapt directives to pre-4.2 configuration, if needed
-#    if motionctl.is_motion_pre42():
-#        adapt_config_directives(main_config, _MOTION_POST_TO_PRE_42_OPTIONS_MAPPING)
-
-    config_file_path = os.path.join(settings.CONF_PATH, _MAIN_CONFIG_FILE_NAME)
-
     # read the actual configuration from file
     lines = get_main(as_lines=True)
 
+    main_config = do_motion_config_map('convert_to_version', config=main_config, version=convert_to_version)
+
+    output_file_path = os.path.join(settings.CONF_PATH, _MAIN_CONFIG_FILE_NAME)
+
     # write the configuration to file
-    logging.debug(f'writing main config to {config_file_path}...')
+    logging.debug(f'writing main config to {output_file_path}...')
 
     try:
-        f = open(config_file_path, 'w')
+        f = open(output_file_path, 'w')
 
     except Exception as e:
         logging.error(
             'could not open main config file {path} for writing: {msg}'.format(
-                path=config_file_path, msg=str(e)
+                path=output_file_path, msg=str(e)
             )
         )
 
@@ -328,7 +270,7 @@ def set_main(main_config):
     except Exception as e:
         logging.error(
             'could not write main config file {path}: {msg}'.format(
-                path=config_file_path, msg=str(e)
+                path=output_file_path, msg=str(e)
             )
         )
 
@@ -419,8 +361,8 @@ def get_network_shares():
     return mounts
 
 
-def get_camera(camera_id, as_lines=False):
-    if not as_lines and camera_id in _camera_config_cache:
+def get_camera(camera_id, as_lines=False, motion_version_override=False, convert_to_version=False):
+    if not motion_version_override and not as_lines and camera_id in _camera_config_cache:
         return _camera_config_cache[camera_id]
 
     camera_config_path = os.path.join(settings.CONF_PATH, _CAMERA_CONFIG_FILE_NAME) % {
@@ -477,17 +419,14 @@ def get_camera(camera_id, as_lines=False):
 
     if utils.is_local_motion_camera(camera_config):
         # determine the enabled status
-        main_config = get_main()
+        main_config = get_main(motion_version_override=convert_to_version)
         cameras = main_config.get('camera', [])
         camera_config['@enabled'] = (
             _CAMERA_CONFIG_FILE_NAME % {'id': camera_id} in cameras
         )
         camera_config['@id'] = camera_id
 
-        mc = MotionConfigMapper(motionctl.find_motion()[1])
-        camera_config = mc.convert_from_ver(camera_config)
-        # adapt directives from pre-4.2 configuration
-        #adapt_config_directives(camera_config, _MOTION_PRE_TO_POST_42_OPTIONS_MAPPING)
+        camera_config = do_motion_config_map('convert_from_version', config=camera_config, version=motion_version_override)
         _get_additional_config(camera_config, camera_id=camera_id)
 
         _set_default_motion_camera(camera_id, camera_config)
@@ -512,24 +451,17 @@ def get_camera(camera_id, as_lines=False):
     return camera_config
 
 
-def set_camera(camera_id, camera_config):
+def set_camera(camera_id, camera_config, motion_version_override=False, convert_to_version=False):
     camera_config['@id'] = camera_id
     _camera_config_cache[camera_id] = camera_config
 
     camera_config = dict(camera_config)
 
     if utils.is_local_motion_camera(camera_config):
-        mc = MotionConfigMapper(motionctl.find_motion()[1])
-        camera_config = mc.convert_to_ver(camera_config)
-        # adapt directives from pre-4.2 configuration
-        # adapt directives to pre-4.2 configuration, if needed
-        #if motionctl.is_motion_pre42():
-        #    adapt_config_directives(
-        #        camera_config, _MOTION_POST_TO_PRE_42_OPTIONS_MAPPING
-        #    )
+        camera_config = do_motion_config_map('convert_to_version', config=camera_config, version=convert_to_version)
 
         # set the enabled status in main config
-        main_config = get_main()
+        main_config = get_main(motion_version_override=convert_to_version)
         cameras = main_config.setdefault('camera', [])
         config_file_name = _CAMERA_CONFIG_FILE_NAME % {'id': camera_id}
         if camera_config['@enabled'] and config_file_name not in cameras:
@@ -550,19 +482,15 @@ def set_camera(camera_id, camera_config):
         _set_additional_config(camera_config, camera_id=camera_id)
 
     # read the actual configuration from file
-    config_file_path = os.path.join(settings.CONF_PATH, _CAMERA_CONFIG_FILE_NAME) % {
+    camera_config_path = os.path.join(settings.CONF_PATH, _CAMERA_CONFIG_FILE_NAME) % {
         'id': camera_id
     }
-    if os.path.isfile(config_file_path):
-        lines = get_camera(camera_id, as_lines=True)
+    if os.path.isfile(camera_config_path):
+        lines = get_camera(camera_id, as_lines=True, motion_version_override=motion_version_override)
 
     else:
         lines = []
 
-    # write the configuration to file
-    camera_config_path = os.path.join(settings.CONF_PATH, _CAMERA_CONFIG_FILE_NAME) % {
-        'id': camera_id
-    }
     logging.debug(f'writing camera config to {camera_config_path}...')
 
     try:

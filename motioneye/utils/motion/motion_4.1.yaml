@@ -1,0 +1,111 @@
+params:
+  lightswitch_frames:
+    mtype: none
+  lightswitch_percent:
+    mtype: int
+    mname: lightswitch
+  log_file:
+    mtype: str
+    mname: logfile
+  movie_bps:
+    mtype: int
+    mname: ffmpeg_bps
+  movie_codec:
+    mtype: str
+    mname: ffmpeg_video_codec
+  movie_duplicate_frames:
+    mtype: bool
+    mname: ffmpeg_duplicate_frames
+  movie_extpipe:
+    mtype: str
+    mname: extpipe
+  movie_extpipe_use:
+    mtype: bool
+    mname: use_extpipe
+  movie_passthrough:
+    mtype: none
+  native_language:
+    mtype: none
+  movie_quality:
+    mtype: int
+    mname: ffmpeg_variable_bitrate
+  movie_output:
+    mtype: bool
+    mname: ffmpeg_output_movies
+  movie_output_motion:
+    mtype: bool
+    mname: ffmpeg_output_debug_movies
+  movie_max_time:
+    mtype: int
+    mname: max_movie_time
+  native_language:
+    mtype: none
+  native_decoder:
+    mtype: none
+  netcam_use_tcp:
+    mtype: bool
+    mname: rtsp_uses_tcp
+  pause:
+    mtype: none
+  pid_file:
+    mtype: str
+    mname: process_id_file
+  picture_exif:
+    mtype: str
+    mname: exif_text
+  picture_output:
+    mtype: str
+    mname: output_pictures
+  picture_output_motion:
+    mtype: bool
+    mname: output_debug_pictures
+  picture_quality:
+    mtype: int
+    mname: quality
+  roundrobin_switchfilter:
+    mtype: bool
+    mname: switchfilter
+  sql_query_stop:
+    mtype: none
+  stream_cors_header:
+    mtype: none
+  stream_grey:
+    mtype: none
+  stream_preview_method:
+    mtype: none
+  stream_tls:
+    mtype: none
+  text_scale:
+    mtype: int
+    mname: text_double
+  track_generic_move:
+    mtype: none
+  treshold_maximum:
+    mtype: none
+  watchdog_tmo:
+    mtype: none
+  watchdog_kill:
+    mtype: none
+  webcontrol_auth_method:
+    mtype: none
+  webcontrol_cert:
+    mtype: none
+  webcontrol_cors_header:
+    mtype: none
+  webcontrol_interface:
+    mtype: int
+    mname: webcontrol_html_output
+  webcontrol_ipv6:
+    mtype: bool
+    mname: ipv6_enabled
+  webcontrol_key:
+    mtype: none
+  webcontrol_lock_attempts:
+    mtype: none
+  webcontrol_lock_max_ips:
+    mtype: none
+  webcontrol_lock_minutes:
+    mtype: none
+  webcontrol_tls:
+    mtype: none
+

@@ -1,4 +1,24 @@
 params:
+  brightness:
+    mtype: int 
+    mlist_name: video_params
+    mname: brightness
+  contrast:
+    mtype: int
+    mlist_name: video_params
+    mname: contrast
+  frequency:
+    mtype: int
+    mlist_name: video_params
+    mname: frequency
+  hue:
+    mtype: int
+    mlist_name: video_params
+    mname: hue
+  input:
+    mtype: int
+    mlist_name: video_params
+    mname: input
   netcam_highres:
     mtype: str
     mname: netcam_high_url
@@ -34,35 +54,10 @@ params:
     mtype: str 
     mlist_name: netcam_params
     mname: input_format
-
-  frequency:
-    mtype: int
-    mlist_name: video_params
-    mname: frequency
-  input:
-    mtype: int
-    mlist_name: video_params
-    mname: input
   norm:
     mtype: int 
     mlist_name: video_params
     mname: norm
-  v4l2_palette:
-    mtype: int 
-    mlist_name: video_params
-    mname: v4l2_palette
-  brightness:
-    mtype: int 
-    mlist_name: video_params
-    mname: brightness
-  contrast:
-    mtype: int
-    mlist_name: video_params
-    mname: contrast
-  hue:
-    mtype: int
-    mlist_name: video_params
-    mname: hue
   power_line_frequency:
     mtype: int 
     mlist_name: video_params
@@ -71,5 +66,8 @@ params:
     mtype: int 
     mlist_name: video_params
     mname: saturation
-
+  v4l2_palette:
+    mtype: int 
+    mlist_name: video_params
+    mname: v4l2_palette
 
